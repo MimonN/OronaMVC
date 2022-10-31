@@ -7,6 +7,7 @@ namespace OronaMVC.Models
         [Key]
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Cleaning Type")]
         public string CleaningName { get; set; }
     }
 }

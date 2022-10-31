@@ -1,0 +1,26 @@
+﻿@model CleaningType
+
+<form method="post">
+	<div class="border p-3 mt-4">
+		<div class="row pb-2">
+			<h2 class="text-primary">Create Cleaning Type</h2>
+			<hr />
+		</div>
+		@*<div asp-validation-summary="All" class="text-danger"></div>*@
+		<div class="mb-3">
+			<label asp-for="CleaningName"></label>
+			<input asp-for="CleaningName" class="form-control" />
+			<span asp-validation-for="CleaningName" class="text-danger"></span>
+		</div>
+		<button type="submit" class="btn btn-primary" style="width:150px">Create</button>
+		<a asp-controller="CleaningType" asp-action="Index" class="btn btn-secondary" style="width:150px">
+			Back to List
+		</a>
+	</div>
+</form>
+
+@section Scripts{
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+}

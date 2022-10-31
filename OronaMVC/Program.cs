@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using OronaMVC.Data;
+using OronaMVC.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 

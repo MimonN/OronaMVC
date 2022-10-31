@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OronaMVC.Models;
 
-namespace OronaMVC.Data
+namespace OronaMVC.DataAccess
 {
     public class ApplicationDbContext : DbContext
     {
