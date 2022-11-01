@@ -40,21 +40,14 @@ namespace OronaMVC.DataAccess.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task RemoveAsync(T entity)
+        public void Remove(T entity)
         {
             dbSet.Remove(entity);
-            await SaveAsync();
         }
 
-        public async Task RemoveRangeAsync(IEnumerable<T> entity)
+        public void RemoveRange(IEnumerable<T> entity)
         {
             dbSet.RemoveRange(entity);
-            await SaveAsync();
-        }
-
-        public async Task SaveAsync()
-        {
-            await _db.SaveChangesAsync();
         }
     }
 }
