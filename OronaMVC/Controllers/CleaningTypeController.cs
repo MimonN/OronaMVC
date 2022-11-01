@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OronaMVC.DataAccess;
+using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
 
 namespace OronaMVC.Controllers
 {
     public class CleaningTypeController : Controller
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ICleaningTypeRepository _db;
 
-        public CleaningTypeController(ApplicationDbContext db)
+        public CleaningTypeController(ICleaningTypeRepository db)
         {
             _db = db;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<CleaningType> objCleaningType = _db.CleaningTypes;
+            IEnumerable<CleaningType> objCleaningType = await _db.GetAllAsync();
 
             return View(objCleaningType);
         }
@@ -27,15 +28,15 @@ namespace OronaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(CleaningType obj)
+        public async Task<IActionResult> Create(CleaningType obj)
         {
             if(ModelState.IsValid)
             {
-                var objFromDb = _db.CleaningTypes.FirstOrDefault(u => u.CleaningName == obj.CleaningName);
+                var objFromDb = await _db.GetFirstOrDefaultAsync(u => u.CleaningName == obj.CleaningName);
                 if(objFromDb == null || objFromDb.CleaningName != obj.CleaningName)
                 {
-                    _db.CleaningTypes.Add(obj);
-                    _db.SaveChanges();
+                    await _db.AddAsync(obj);
+                    await _db.SaveAsync();
                     TempData["success"] = "Cleaning Type created successfully";
                     return RedirectToAction("Index");
                 }
@@ -49,13 +50,13 @@ namespace OronaMVC.Controllers
               
         }
 
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if(id == null || id == 0)
             {
                 return NotFound();
             }
-            var cleaningTypeFromDb = _db.CleaningTypes.Find(id);
+            var cleaningTypeFromDb = await _db.GetFirstOrDefaultAsync(u => u.Id == id);
             if(cleaningTypeFromDb == null) 
             {
                 return NotFound();
@@ -65,13 +66,13 @@ namespace OronaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(CleaningType obj)
+        public async Task<IActionResult> Edit(CleaningType obj)
         {
-			var objFromDb = _db.CleaningTypes.FirstOrDefault(u => u.CleaningName == obj.CleaningName);
+			var objFromDb = await _db.GetFirstOrDefaultAsync(u => u.CleaningName == obj.CleaningName);
 			if (objFromDb == null || objFromDb.CleaningName != obj.CleaningName)
 			{
-				_db.CleaningTypes.Update(obj);
-				_db.SaveChanges();
+				await _db.UpdateAsync(obj);
+				await _db.SaveAsync();
                 TempData["success"] = "Cleaning Type updated successfully";
                 return RedirectToAction("Index");
 			}
@@ -82,14 +83,14 @@ namespace OronaMVC.Controllers
 			return View(obj);
 		}
 
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
 
-            var cleaningTypeFromDb = _db.CleaningTypes.Find(id);
+            var cleaningTypeFromDb = await _db.GetFirstOrDefaultAsync(u => u.Id == id);
             if (cleaningTypeFromDb == null)
             {
                 return NotFound();
@@ -100,16 +101,16 @@ namespace OronaMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePOST(int? id)
+        public async Task<IActionResult> DeletePOST(int? id)
         {
-            var obj = _db.CleaningTypes.Find(id);
+            var obj = await _db.GetFirstOrDefaultAsync(u => u.Id == id);  
             if (obj == null)
             {
                 return NotFound();
             }
 
-            _db.CleaningTypes.Remove(obj);
-            _db.SaveChanges();
+            await _db.RemoveAsync(obj);
+            await _db.SaveAsync();
             TempData["success"] = "Cleaning Type deleted successfully";
             return RedirectToAction("Index");
         }
