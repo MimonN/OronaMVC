@@ -9,6 +9,7 @@ namespace OronaMVC.DataAccess.Repository.IRepository
     public interface IUnitOfWork
     {
         ICleaningTypeRepository CleaningType { get; }
+        IWindowTypeRepository WindowType { get; }
 
         Task SaveAsync();
     }

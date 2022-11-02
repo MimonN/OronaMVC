@@ -9,8 +9,10 @@ namespace OronaMVC.DataAccess.Repository
         {
             _db = db;
             CleaningType = new CleaningTypeRepository(_db);
+            WindowType = new WindowTypeRepository(_db);
         }
         public ICleaningTypeRepository CleaningType { get; private set; }
+        public IWindowTypeRepository WindowType { get; private set; }
 
         public async Task SaveAsync()
         {

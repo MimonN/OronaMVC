@@ -1,0 +1,36 @@
+﻿@model WindowType
+
+<form method="post" asp-action="Upsert" enctype="multipart/form-data">
+    <input asp-for="Id" hidden />
+
+    <div class="col-12">
+        <h2 class="text-primary">@(Model.Id != 0 ? "Update" : "Create") Window Type</h2>
+    </div>
+    <hr />
+    <div class="col-12">
+        <label asp-for="WindowTypeName"></label>
+        <input asp-for="WindowTypeName" class="form-control" />
+        <span asp-validation-for="WindowTypeName" class="text-danger"></span>
+    </div>
+    <div class="col-12">
+        <label asp-for="ImageUrl"></label>
+        <input type="file" id="uploadBox" name="file" class="form-control" />
+    </div>
+
+    <div class="mt-5">
+        @if (Model.Id != 0)
+        {
+            <button type="submit" class="btn btn-primary" style="width:150px">Update</button>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-primary" style="width:150px">Create</button>
+        }
+        <a asp-controller="WindowType" asp-action="Index" class="btn btn-secondary" style="width:150px">
+            Back to List
+        </a>
+    </div>
+
+</form>
+
+

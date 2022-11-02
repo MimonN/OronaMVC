@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33015.44
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OronaMVC.Web", "OronaMVC\OronaMVC.Web.csproj", "{08115939-2C58-4229-A91F-C3AEC0CD7496}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OronaMVC.Web", "OronaMVC\OronaMVC.Web.csproj", "{08115939-2C58-4229-A91F-C3AEC0CD7496}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OronaMVC.DataAccess", "OronaMVC.DataAccess\OronaMVC.DataAccess.csproj", "{BB939BDD-1745-40D5-AF83-814377A23676}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OronaMVC.DataAccess", "OronaMVC.DataAccess\OronaMVC.DataAccess.csproj", "{BB939BDD-1745-40D5-AF83-814377A23676}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OronaMVC.Models", "OronaMVC.Models\OronaMVC.Models.csproj", "{4A5BBA41-290B-428B-BF41-0637296A11D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OronaMVC.Models", "OronaMVC.Models\OronaMVC.Models.csproj", "{4A5BBA41-290B-428B-BF41-0637296A11D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OronaMVC.Utility", "OronaMVC.Utility\OronaMVC.Utility.csproj", "{81F35BE9-86C0-4B27-8DE5-ECA4764ADA01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OronaMVC.Utility", "OronaMVC.Utility\OronaMVC.Utility.csproj", "{81F35BE9-86C0-4B27-8DE5-ECA4764ADA01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
