@@ -3,8 +3,9 @@ using OronaMVC.DataAccess;
 using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
 
-namespace OronaMVC.Controllers
+namespace OronaMVC.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CleaningTypeController : Controller
     {
         private readonly IUnitOfWork _unitOfWOrk;
@@ -30,10 +31,10 @@ namespace OronaMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CleaningType obj)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var objFromDb = await _unitOfWOrk.CleaningType.GetFirstOrDefaultAsync(u => u.CleaningName == obj.CleaningName);
-                if(objFromDb == null || objFromDb.CleaningName != obj.CleaningName)
+                if (objFromDb == null || objFromDb.CleaningName != obj.CleaningName)
                 {
                     await _unitOfWOrk.CleaningType.AddAsync(obj);
                     await _unitOfWOrk.SaveAsync();
@@ -44,20 +45,20 @@ namespace OronaMVC.Controllers
                 {
                     ModelState.AddModelError("CleaningName", "Cleaning Type already exists.");
                 }
-                
+
             }
             return View(obj);
-              
+
         }
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if(id == null || id == 0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
             var cleaningTypeFromDb = await _unitOfWOrk.CleaningType.GetFirstOrDefaultAsync(u => u.Id == id);
-            if(cleaningTypeFromDb == null) 
+            if (cleaningTypeFromDb == null)
             {
                 return NotFound();
             }
@@ -68,20 +69,20 @@ namespace OronaMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CleaningType obj)
         {
-			var objFromDb = await _unitOfWOrk.CleaningType.GetFirstOrDefaultAsync(u => u.CleaningName == obj.CleaningName);
-			if (objFromDb == null || objFromDb.CleaningName != obj.CleaningName)
-			{
-				await _unitOfWOrk.CleaningType.UpdateAsync(obj);
-				await _unitOfWOrk.SaveAsync();
+            var objFromDb = await _unitOfWOrk.CleaningType.GetFirstOrDefaultAsync(u => u.CleaningName == obj.CleaningName);
+            if (objFromDb == null || objFromDb.CleaningName != obj.CleaningName)
+            {
+                await _unitOfWOrk.CleaningType.UpdateAsync(obj);
+                await _unitOfWOrk.SaveAsync();
                 TempData["success"] = "Cleaning Type updated successfully";
                 return RedirectToAction("Index");
-			}
-			else
-			{
-				ModelState.AddModelError("CleaningName", "Cleaning Type already exists.");
-			}
-			return View(obj);
-		}
+            }
+            else
+            {
+                ModelState.AddModelError("CleaningName", "Cleaning Type already exists.");
+            }
+            return View(obj);
+        }
 
         public async Task<IActionResult> Delete(int? id)
         {
@@ -103,7 +104,7 @@ namespace OronaMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePOST(int? id)
         {
-            var obj = await _unitOfWOrk.CleaningType.GetFirstOrDefaultAsync(u => u.Id == id);  
+            var obj = await _unitOfWOrk.CleaningType.GetFirstOrDefaultAsync(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();

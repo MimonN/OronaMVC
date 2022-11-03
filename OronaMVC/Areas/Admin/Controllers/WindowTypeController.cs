@@ -1,19 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OronaMVC.DataAccess;
+using OronaMVC.DataAccess.Repository;
 using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
 
-namespace OronaMVC.Controllers
+namespace OronaMVC.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class WindowTypeController : Controller
     {
+        private readonly ApplicationDbContext _db;
         private readonly IUnitOfWork _unitOfWOrk;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public WindowTypeController(IUnitOfWork unitOfWOrk, IWebHostEnvironment hostEnvironment)
+        public WindowTypeController(IUnitOfWork unitOfWOrk, IWebHostEnvironment hostEnvironment, ApplicationDbContext db)
         {
             _unitOfWOrk = unitOfWOrk;
             _hostEnvironment = hostEnvironment;
+            _db = db;
         }
 
         public async Task<IActionResult> Index()
@@ -26,7 +31,7 @@ namespace OronaMVC.Controllers
         public async Task<IActionResult> Upsert(int? id)
         {
             WindowType windowType = new();
-            if(id == null || id == 0)
+            if (id == null || id == 0)
             {
                 return View(windowType);
             }
@@ -65,6 +70,11 @@ namespace OronaMVC.Controllers
                     }
                     obj.ImageUrl = @"\images\windowTypes\" + fileName + extension;
                 }
+                else
+                {
+                    var objFromDb = await _db.WindowTypes.AsNoTracking().FirstOrDefaultAsync(u => u.Id == obj.Id);
+                    obj.ImageUrl = objFromDb.ImageUrl;
+                }
                 if (obj.Id == 0)
                 {
                     await _unitOfWOrk.WindowType.AddAsync(obj);
@@ -100,7 +110,7 @@ namespace OronaMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePOST(int? id)
         {
-            var obj = await _unitOfWOrk.WindowType.GetFirstOrDefaultAsync(u => u.Id == id);  
+            var obj = await _unitOfWOrk.WindowType.GetFirstOrDefaultAsync(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
