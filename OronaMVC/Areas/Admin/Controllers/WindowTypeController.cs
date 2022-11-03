@@ -70,11 +70,6 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
                     }
                     obj.ImageUrl = @"\images\windowTypes\" + fileName + extension;
                 }
-                else
-                {
-                    var objFromDb = await _db.WindowTypes.AsNoTracking().FirstOrDefaultAsync(u => u.Id == obj.Id);
-                    obj.ImageUrl = objFromDb.ImageUrl;
-                }
                 if (obj.Id == 0)
                 {
                     await _unitOfWOrk.WindowType.AddAsync(obj);
@@ -82,6 +77,9 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
                 else
                 {
                     await _unitOfWOrk.WindowType.UpdateAsync(obj);
+                    await _unitOfWOrk.SaveAsync();
+                    TempData["success"] = "Window Type updated successfully";
+                    return RedirectToAction("Index");
                 }
                 await _unitOfWOrk.SaveAsync();
                 TempData["success"] = "Window Type created successfully";
