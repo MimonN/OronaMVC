@@ -10,6 +10,7 @@ namespace OronaMVC.DataAccess.Repository.IRepository
     {
         ICleaningTypeRepository CleaningType { get; }
         IWindowTypeRepository WindowType { get; }
+        IProductRepository Product { get; }
 
         Task SaveAsync();
     }
