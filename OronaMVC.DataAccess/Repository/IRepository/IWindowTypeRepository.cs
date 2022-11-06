@@ -10,5 +10,6 @@ namespace OronaMVC.DataAccess.Repository.IRepository
     public interface IWindowTypeRepository : IRepository<WindowType>
     {
         Task UpdateAsync(WindowType obj);
+        Task<IEnumerable<WindowType>> GetAllWindowTypesWithProductsWithCleaningTypes();
     }
 }

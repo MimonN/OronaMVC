@@ -9,5 +9,7 @@ namespace OronaMVC.Models
         [Required]
         [Display(Name = "Cleaning Type")]
         public string CleaningName { get; set; }
+
+        public List<Product>? Products { get; set; }
     }
 }

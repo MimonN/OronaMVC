@@ -17,22 +17,15 @@ namespace OronaMVC.Models
         [Required]
         [Range(1, 100)]
         public double Price { get; set; }
-        public DateTime? DateCreated { get; set; } 
+        public DateTime? DateCreated { get; set; }
         public DateTime? DateUpdated { get; set; }
 
         [Required]
         public int CleaningTypeId { get; set; }
-		[ForeignKey("CleaningTypeId")]
-        [ValidateNever]
-		public CleaningType CleaningType { get; set; }
+        public CleaningType? CleaningType { get; set; }
 
         [Required]
         public int WindowTypeId { get; set; }
-		[ValidateNever]
-		public WindowType WindowType { get; set; }
-
-
-
-
+        public WindowType? WindowType { get; set; }
     }
 }

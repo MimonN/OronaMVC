@@ -1,4 +1,5 @@
-﻿using OronaMVC.DataAccess.Repository.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
 
 namespace OronaMVC.DataAccess.Repository
@@ -10,6 +11,12 @@ namespace OronaMVC.DataAccess.Repository
         public WindowTypeRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
+        }
+
+        public async Task<IEnumerable<WindowType>> GetAllWindowTypesWithProductsWithCleaningTypes()
+        {
+            var result = await _db.WindowTypes.Include(u => u.Products).ThenInclude(c => c.CleaningType).ToListAsync();
+            return result;
         }
 
         public async Task UpdateAsync(WindowType obj)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
 using System.Diagnostics;
 
@@ -8,15 +9,19 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _unitOfWOrk;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWOrk = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            IEnumerable<WindowType> windowTypeList = await _unitOfWOrk.WindowType.GetAllWindowTypesWithProductsWithCleaningTypes();
+
+            return View(windowTypeList);
         }
 
         public IActionResult Privacy()
