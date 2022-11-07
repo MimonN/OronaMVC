@@ -1,23 +1,25 @@
 ﻿@model IEnumerable<WindowType>
-<div class="container">
-    <div class="row col-12">
-        @foreach (var winType in Model.Where(u => u.Products.Count != 0))
-        {
 
-            <div class="col-lg-4 col-md-5 mt-5 d-flex justify-content-around">
-                <div class="card" style="width: 18rem;">
+<div class="container">
+    @foreach (var winType in Model.Where(u => u.Products.Count != 0))
+    {
+        <div class="border row m-2" style="background-color: lightseagreen;">
+            <div class="col-3">
+                <div class="m-3">
                     <div class="d-flex justify-content-center mt-2" style="width: auto; height: 200px;">
                         <img src="@winType.ImageUrl" class="img-fluid" alt="Window Type Image">
                     </div>
-                    <div class="mt-3">
-                        <h5 class="card-title text-center"><b>Window Type: </b>@winType.WindowTypeName</h5>
-                    </div>
-                    <hr />
-
-                    <div class="text-center">
-                        @foreach (var product in winType.Products)
-                        {
-                            <div class="card m-2" style="background-color: lightblue;">
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="m-2">
+                    <h5 class="bg-primary p-3 text-white">Window Type: <b>@winType.WindowTypeName</b></h5>
+                </div>
+                <div class="row">
+                    @foreach (var product in winType.Products)
+                    {
+                        <div class="col-4">
+                            <div class="text-center m-2 p-2" style="background-color: lightblue;">
                                 <p class="mt-1"><b>Cleaning Type: </b>@product.CleaningType.CleaningName</p>
                                 <p class=""><b>Price: </b>@product.Price.ToString("$00.00")</p>
                                 <p class="">
@@ -26,15 +28,10 @@
                                     </a>
                                 </p>
                             </div>
-
-                        }
-                    </div>
-
+                        </div>
+                    }
                 </div>
             </div>
-
-
-        }
-    </div>
+        </div>
+    }
 </div>
-
