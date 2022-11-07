@@ -1,0 +1,42 @@
+﻿@model OronaMVC.Models.ViewModels.ShoppingCart
+
+<form method="post">
+    <div class="card  container pt-4">
+        <div class="card-header bg-primary text-light ml-0  row ">
+            <div class="col-12 col-md-6">
+                <h1 class="text-white">Window Type: @Model.Product.WindowType.WindowTypeName</h1>
+                <h2 class="text-white">Cleaning Type: @Model.Product.CleaningType.CleaningName</h2>
+            </div>
+        </div>
+        <div class="card-body row container">
+            <div class="container rounded p-2">
+                <div class="row">
+                    <div class="col-8 col-lg-8">
+                        <h2>Price: @Model.Product.Price.ToString("c")</h2>
+                        <h3>Description:</h3>
+                        <p>@Model.Product.Description</p>
+                        <div class="row pl-2">
+                            <div class="col-2 text-primary"><h4>Count</h4></div>
+                            <div class="col-10"><input asp-for="Count" class="form-control" /></div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 offset-lg-1 text-center">
+                        <div class="text-center" style="width: 150px;">
+                            <img src="@Model.Product.WindowType.ImageUrl" width="100%" class="rounded" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row">
+                <div class="col-12 col-md-6 pb-1">
+                    <button class="btn btn-success form-control" style="height:50px;" asp-action="Index">Back to Home</button>
+                </div>
+                <div class="col-12 col-md-6 pb-1">
+                    <button type="submit" value="Add to Cart" class="btn btn-primary form-control" style="height:50px;">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

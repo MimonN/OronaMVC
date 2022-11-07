@@ -1,44 +1,60 @@
 ﻿@model Product
 
-<form method="post">
-    <input asp-for="Id" hidden />
-    <div class="border p-3 mt-4">
-        <div class="row pb-2">
-            <h2 class="text-primary">Update Product</h2>
-            <hr />
-        </div>
-        <div asp-validation-summary="All" class="text-danger"></div>
-
-        <div class="col-lg-4 col-md-5 mt-5 d-flex justify-content-around">
-            <div class="card" style="width: 18rem;">
-                <div class="d-flex justify-content-center mt-2" style="width: auto; height: 200px;">
-                    <img src="@Model.WindowType.ImageUrl" class="img-fluid" alt="Window Type Image">
-                </div>
-                <div class="card-body text-center">
-                    <h5 class="card-title">@Model.WindowType.WindowTypeName</h5>
-                    <h5 class="card-title">@Model.CleaningType.CleaningName</h5>
-                    <div class="mb-3">
-                        <label asp-for="Description"></label>
-                        <textarea asp-for="Description" rows="3" class="form-control"></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
+<div class="container">
+    <form method="post">
+        <input asp-for="Id" hidden />
+        <div class="border p-3 mt-4">
+            <div class="row pb-2">
+                <h2 class="text-primary">Update Product</h2>
+                <hr />
+            </div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="col-12 row">
+                        <div class="col-6 align-self-center text-center">
+                            <div>
+                                <h5 class="card-title">Window Type: @Model.WindowType.WindowTypeName</h5>
+                                <h5 class="card-title">Cleaning Type: @Model.CleaningType.CleaningName</h5>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex justify-content-center mt-2" style="width: auto; height: 200px;">
+                                <img src="@Model.WindowType.ImageUrl" class="img-fluid" alt="Window Type Image">
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label asp-for="Price"></label>
-                        <input asp-for="Price" class="form-control" />
-                        <span asp-validation-for="Price" class="text-danger"></span>
-                    </div>
+                    <div class="card-body text-center">
 
+                        <div class="mb-3">
+                            <label asp-for="Description"></label>
+                            <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Price">$ Price</label>
+                            <input asp-for="Price" class="form-control text-center" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+
+                        <div class="row d-flex justify-content-center">
+                            <button type="submit" class="btn btn-primary col-6">Update</button>
+                            <button asp-controller="Product" asp-action="Index" class="btn btn-secondary col-6">
+                                Back to List
+                            </button>
+                        </div>
+
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <button type="submit" class="btn btn-primary" style="width:150px">Update</button>
-        <a asp-controller="Product" asp-action="Index" class="btn btn-secondary" style="width:150px">
-            Back to List
-        </a>
-    </div>
-</form>
+
+        </div>
+    </form>
+</div>
+
 
 @section Scripts{
     @{
