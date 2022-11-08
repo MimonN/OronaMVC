@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using OronaMVC.Models;
 using OronaMVC.Utility;
 
 namespace OronaMVC.Web.Areas.Identity.Pages.Account
@@ -101,7 +102,14 @@ namespace OronaMVC.Web.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-        }
+            [Required]
+			public string Name { get; set; }
+			public string StreetAddress { get; set; }
+			public string City { get; set; }
+			public string State { get; set; }
+			public string PostalCode { get; set; }
+			public string PhoneNumber { get; set; }
+		}
 
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -128,6 +136,12 @@ namespace OronaMVC.Web.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.StreetAddress = Input.StreetAddress;
+                user.City = Input.City;
+                user.State = Input.State;
+                user.PostalCode = Input.PostalCode;
+                user.Name = Input.Name;
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -166,11 +180,11 @@ namespace OronaMVC.Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
