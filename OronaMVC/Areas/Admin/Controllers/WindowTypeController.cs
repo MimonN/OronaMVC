@@ -11,19 +11,19 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
     public class WindowTypeController : Controller
     {
         private readonly ApplicationDbContext _db;
-        private readonly IUnitOfWork _unitOfWOrk;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _hostEnvironment;
 
-        public WindowTypeController(IUnitOfWork unitOfWOrk, IWebHostEnvironment hostEnvironment, ApplicationDbContext db)
+        public WindowTypeController(IUnitOfWork unitOfWork, IWebHostEnvironment hostEnvironment, ApplicationDbContext db)
         {
-            _unitOfWOrk = unitOfWOrk;
+            _unitOfWork = unitOfWork;
             _hostEnvironment = hostEnvironment;
             _db = db;
         }
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<WindowType> objWindowType = await _unitOfWOrk.WindowType.GetAllAsync();
+            IEnumerable<WindowType> objWindowType = await _unitOfWork.WindowType.GetAllAsync();
 
             return View(objWindowType);
         }
@@ -37,7 +37,7 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
             }
             else
             {
-                var objWindowTypeFromDb = await _unitOfWOrk.WindowType.GetFirstOrDefaultAsync(x => x.Id == id);
+                var objWindowTypeFromDb = await _unitOfWork.WindowType.GetFirstOrDefaultAsync(x => x.Id == id);
                 return View(objWindowTypeFromDb);
             }
         }
@@ -72,16 +72,16 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
                 }
                 if (obj.Id == 0)
                 {
-                    await _unitOfWOrk.WindowType.AddAsync(obj);
+                    await _unitOfWork.WindowType.AddAsync(obj);
                 }
                 else
                 {
-                    await _unitOfWOrk.WindowType.UpdateAsync(obj);
-                    await _unitOfWOrk.SaveAsync();
+                    await _unitOfWork.WindowType.UpdateAsync(obj);
+                    await _unitOfWork.SaveAsync();
                     TempData["success"] = "Window Type updated successfully";
                     return RedirectToAction("Index");
                 }
-                await _unitOfWOrk.SaveAsync();
+                await _unitOfWork.SaveAsync();
                 TempData["success"] = "Window Type created successfully";
                 return RedirectToAction("Index");
             }
@@ -95,7 +95,7 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var windowTypeFromDb = await _unitOfWOrk.WindowType.GetFirstOrDefaultAsync(u => u.Id == id);
+            var windowTypeFromDb = await _unitOfWork.WindowType.GetFirstOrDefaultAsync(u => u.Id == id);
             if (windowTypeFromDb == null)
             {
                 return NotFound();
@@ -108,7 +108,7 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePOST(int? id)
         {
-            var obj = await _unitOfWOrk.WindowType.GetFirstOrDefaultAsync(u => u.Id == id);
+            var obj = await _unitOfWork.WindowType.GetFirstOrDefaultAsync(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
@@ -120,8 +120,8 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
                 System.IO.File.Delete(oldImagePath);
             }
 
-            _unitOfWOrk.WindowType.Remove(obj);
-            await _unitOfWOrk.SaveAsync();
+			_unitOfWork.WindowType.Remove(obj);
+            await _unitOfWork.SaveAsync();
             TempData["success"] = "Window Type deleted successfully";
             return RedirectToAction("Index");
         }

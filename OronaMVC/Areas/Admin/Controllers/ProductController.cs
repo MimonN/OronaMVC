@@ -9,16 +9,16 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProductController : Controller
     {
-        private readonly IUnitOfWork _unitOfWOrk;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ProductController(IUnitOfWork unitOfWOrk)
+        public ProductController(IUnitOfWork unitOfWork)
         {
-            _unitOfWOrk = unitOfWOrk;
+			_unitOfWork = unitOfWork;
         }
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<Product> objProduct = await _unitOfWOrk.Product.GetAllAsync(includeProperties:"CleaningType,WindowType");
+            IEnumerable<Product> objProduct = await _unitOfWork.Product.GetAllAsync(includeProperties:"CleaningType,WindowType");
 
             return View(objProduct);
         }
@@ -26,14 +26,14 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             Product product = new();
-            var cleaningTypesFromDb = await _unitOfWOrk.CleaningType.GetAllAsync();
+            var cleaningTypesFromDb = await _unitOfWork.CleaningType.GetAllAsync();
             IEnumerable<SelectListItem> CleaningTypeList = cleaningTypesFromDb.Select(
                 u => new SelectListItem
                 {
                     Text = u.CleaningName,
                     Value = u.Id.ToString()
                 });
-            var windowTypesFromDb = await _unitOfWOrk.WindowType.GetAllAsync();
+            var windowTypesFromDb = await _unitOfWork.WindowType.GetAllAsync();
             IEnumerable<SelectListItem> WindowTypeList = windowTypesFromDb.Select(
                 u => new SelectListItem
                 {
@@ -53,12 +53,12 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var objFromDb = await _unitOfWOrk.Product.ProductExistAsync(obj);
+                var objFromDb = await _unitOfWork.Product.ProductExistAsync(obj);
 
                 if (objFromDb == null)
                 {
-                    await _unitOfWOrk.Product.AddAsync(obj);
-                    await _unitOfWOrk.SaveAsync();
+                    await _unitOfWork.Product.AddAsync(obj);
+                    await _unitOfWork.SaveAsync();
                     TempData["success"] = "Product created successfully";
                     return RedirectToAction("Index");
                 }
@@ -66,14 +66,14 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
                 {
                     ModelState.AddModelError("Product", "Product already exists.");
 
-					var cleaningTypesFromDb = await _unitOfWOrk.CleaningType.GetAllAsync();
+					var cleaningTypesFromDb = await _unitOfWork.CleaningType.GetAllAsync();
 					IEnumerable<SelectListItem> CleaningTypeList = cleaningTypesFromDb.Select(
 						u => new SelectListItem
 						{
 							Text = u.CleaningName,
 							Value = u.Id.ToString()
 						});
-					var windowTypesFromDb = await _unitOfWOrk.WindowType.GetAllAsync();
+					var windowTypesFromDb = await _unitOfWork.WindowType.GetAllAsync();
 					IEnumerable<SelectListItem> WindowTypeList = windowTypesFromDb.Select(
 						u => new SelectListItem
 						{
@@ -96,7 +96,7 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var productFromDb = await _unitOfWOrk.Product.GetFirstOrDefaultAsync(u => u.Id == id, includeProperties: "CleaningType,WindowType");
+            var productFromDb = await _unitOfWork.Product.GetFirstOrDefaultAsync(u => u.Id == id, includeProperties: "CleaningType,WindowType");
             if (productFromDb == null)
             {
                 return NotFound();
@@ -108,13 +108,13 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Product obj)
         {
-            var objFromDb = await _unitOfWOrk.Product.GetFirstOrDefaultAsync(u => u.Id == obj.Id, includeProperties: "CleaningType,WindowType");
+            var objFromDb = await _unitOfWork.Product.GetFirstOrDefaultAsync(u => u.Id == obj.Id, includeProperties: "CleaningType,WindowType");
 			if (objFromDb != null)
 			{
                 objFromDb.Price = obj.Price;
                 objFromDb.Description = obj.Description;
-				await _unitOfWOrk.Product.UpdateAsync(objFromDb);
-				await _unitOfWOrk.SaveAsync();
+				await _unitOfWork.Product.UpdateAsync(objFromDb);
+				await _unitOfWork.SaveAsync();
 				TempData["success"] = "Product updated successfully";
 				return RedirectToAction("Index");
 			}
@@ -132,7 +132,7 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var productFromDb = await _unitOfWOrk.Product.GetFirstOrDefaultAsync(u => u.Id == id, includeProperties: "CleaningType,WindowType");
+            var productFromDb = await _unitOfWork.Product.GetFirstOrDefaultAsync(u => u.Id == id, includeProperties: "CleaningType,WindowType");
             if (productFromDb == null)
             {
                 return NotFound();
@@ -145,14 +145,14 @@ namespace OronaMVC.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeletePOST(int? id)
         {
-            var obj = await _unitOfWOrk.Product.GetFirstOrDefaultAsync(u => u.Id == id, includeProperties: "CleaningType,WindowType");
+            var obj = await _unitOfWork.Product.GetFirstOrDefaultAsync(u => u.Id == id, includeProperties: "CleaningType,WindowType");
             if (obj == null)
             {
                 return NotFound();
             }
 
-            _unitOfWOrk.Product.Remove(obj);
-            await _unitOfWOrk.SaveAsync();
+			_unitOfWork.Product.Remove(obj);
+            await _unitOfWork.SaveAsync();
             TempData["success"] = "Product deleted successfully";
             return RedirectToAction("Index");
         }

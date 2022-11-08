@@ -13,5 +13,7 @@ namespace OronaMVC.DataAccess
         public DbSet<CleaningType> CleaningTypes { get; set; }
         public DbSet<WindowType> WindowTypes { get; set; }
         public DbSet<Product> Products { get; set; }
-    }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+		public DbSet<Company> Companies { get; set; }
+	}
 }
