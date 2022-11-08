@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OronaMVC.DataAccess\OronaMVC.DataAccess.csproj" />
     <ProjectReference Include="..\OronaMVC.Models\OronaMVC.Models.csproj" />
+    <ProjectReference Include="..\OronaMVC.Utility\OronaMVC.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>
