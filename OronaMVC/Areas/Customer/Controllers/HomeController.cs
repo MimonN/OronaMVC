@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
 using OronaMVC.Models.ViewModels;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace OronaMVC.Web.Areas.Customer.Controllers
 {
@@ -25,15 +27,32 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
             return View(windowTypeList);
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int productId)
         {
             ShoppingCart cartObj = new()
             {
                 Count = 1,
-                Product = await _unitOfWOrk.Product.GetFirstOrDefaultAsync(x => x.Id == id, includeProperties: "WindowType,CleaningType")
+                ProductId = productId,
+                Product = await _unitOfWOrk.Product.GetFirstOrDefaultAsync(x => x.Id == productId, includeProperties: "WindowType,CleaningType")
             };
 
             return View(cartObj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Details(ShoppingCart shoppingCart)
+        {
+            //extracting userId from ClaimsIdentity
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            shoppingCart.ApplicationUserId = claim.Value;
+
+            await _unitOfWOrk.ShoppingCart.AddAsync(shoppingCart);
+            await _unitOfWOrk.SaveAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()
