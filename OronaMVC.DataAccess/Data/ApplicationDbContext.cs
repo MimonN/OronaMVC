@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OronaMVC.Models;
+using OronaMVC.Models.ViewModels;
 
 namespace OronaMVC.DataAccess
 {
@@ -15,5 +16,6 @@ namespace OronaMVC.DataAccess
         public DbSet<Product> Products { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 		public DbSet<Company> Companies { get; set; }
-	}
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+    }
 }
