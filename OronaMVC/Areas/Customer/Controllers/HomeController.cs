@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
-using OronaMVC.Models.ViewModels;
 using System.Diagnostics;
 using System.Security.Claims;
 

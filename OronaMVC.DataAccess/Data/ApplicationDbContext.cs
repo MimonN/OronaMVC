@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OronaMVC.Models;
-using OronaMVC.Models.ViewModels;
 
 namespace OronaMVC.DataAccess
 {

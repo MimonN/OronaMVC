@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OronaMVC.Models.ViewModels
+namespace OronaMVC.Models
 {
     public class ShoppingCart
     {

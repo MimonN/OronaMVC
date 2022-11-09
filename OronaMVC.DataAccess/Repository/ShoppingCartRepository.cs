@@ -1,6 +1,5 @@
 ﻿using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
-using OronaMVC.Models.ViewModels;
 
 namespace OronaMVC.DataAccess.Repository
 {
