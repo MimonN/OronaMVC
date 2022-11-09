@@ -25,11 +25,14 @@ namespace OronaMVC.DataAccess.Repository
             await dbSet.AddAsync(entity);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> query = dbSet;
 
-            query = query.Where(filter);
+            if(filter != null)
+            {
+                query = query.Where(filter);
+            }
 
             if(includeProperties != null)
             {

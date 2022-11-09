@@ -18,15 +18,21 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             ShoppingCartVM = new ShoppingCartVM()
             {
-                ListCart = _unitOfWork.ShoppingCart.GetAllAsync(u => u.ApplicationUserId == claim.Value, includeProperties: "Product").GetAwaiter().GetResult()
+                ListCart = await _unitOfWork.ShoppingCart.GetAllShopCartWithProductWithWindowTypeAndCleaningType()
             };
+
+            foreach(var cart in ShoppingCartVM.ListCart)
+            {
+                cart.Price = cart.Product.Price;
+                ShoppingCartVM.CartTotal += (cart.Count * cart.Price);
+            }
 
             return View(ShoppingCartVM);
         }

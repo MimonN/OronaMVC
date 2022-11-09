@@ -1,4 +1,5 @@
-﻿using OronaMVC.DataAccess.Repository.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
 
 namespace OronaMVC.DataAccess.Repository
@@ -18,10 +19,20 @@ namespace OronaMVC.DataAccess.Repository
             return shoppingCart.Count;
         }
 
-        public int IncrementCount(ShoppingCart shoppingCart, int count)
+		public int IncrementCount(ShoppingCart shoppingCart, int count)
         {
             shoppingCart.Count += count;
             return shoppingCart.Count;
         }
-    }
+
+		public async Task<IEnumerable<ShoppingCart>> GetAllShopCartWithProductWithWindowTypeAndCleaningType()
+		{
+            var result = await _db.ShoppingCarts
+                .Include(i => i.Product).ThenInclude(c => c.WindowType)
+                .Include(i => i.Product).ThenInclude(c => c.CleaningType)
+                .ToListAsync();
+            return result;
+                
+		}
+	}
 }

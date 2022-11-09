@@ -11,5 +11,6 @@ namespace OronaMVC.DataAccess.Repository.IRepository
     {
         int IncrementCount(ShoppingCart shoppingCart, int count);
         int DecrementCount(ShoppingCart shoppingCart, int count);
+        Task<IEnumerable<ShoppingCart>> GetAllShopCartWithProductWithWindowTypeAndCleaningType();
     }
 }
