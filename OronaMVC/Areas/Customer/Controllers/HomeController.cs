@@ -49,7 +49,18 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             shoppingCart.ApplicationUserId = claim.Value;
 
-            await _unitOfWOrk.ShoppingCart.AddAsync(shoppingCart);
+            ShoppingCart cartFromDb = await _unitOfWOrk.ShoppingCart.GetFirstOrDefaultAsync(
+                u => u.ApplicationUserId == claim.Value && u.ProductId==shoppingCart.ProductId);
+
+            if(cartFromDb == null)
+            {
+                await _unitOfWOrk.ShoppingCart.AddAsync(shoppingCart);
+            }
+            else
+            {
+                _unitOfWOrk.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
+            }
+
             await _unitOfWOrk.SaveAsync();
 
             return RedirectToAction(nameof(Index));
