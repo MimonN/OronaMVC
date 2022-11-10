@@ -36,5 +36,36 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
 
             return View(ShoppingCartVM);
         }
-    }
+
+        public async Task<IActionResult> Plus(int cartId)
+        {
+            var cart = await _unitOfWork.ShoppingCart.GetFirstOrDefaultAsync(u => u.Id == cartId);
+            _unitOfWork.ShoppingCart.IncrementCount(cart, 1);
+            await _unitOfWork.SaveAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+		public async Task<IActionResult> Minus(int cartId)
+		{
+			var cart = await _unitOfWork.ShoppingCart.GetFirstOrDefaultAsync(u => u.Id == cartId);
+            if(cart.Count <= 1)
+            {
+                _unitOfWork.ShoppingCart.Remove(cart);
+            }
+            else
+            {
+				_unitOfWork.ShoppingCart.DecrementCount(cart, 1);
+			}
+			await _unitOfWork.SaveAsync();
+			return RedirectToAction(nameof(Index));
+		}
+
+		public async Task<IActionResult> Remove(int cartId)
+		{
+			var cart = await _unitOfWork.ShoppingCart.GetFirstOrDefaultAsync(u => u.Id == cartId);
+            _unitOfWork.ShoppingCart.Remove(cart);
+			await _unitOfWork.SaveAsync();
+			return RedirectToAction(nameof(Index));
+		}
+	}
 }
