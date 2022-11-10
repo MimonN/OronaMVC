@@ -14,7 +14,7 @@
     <br /><br />
 
     <div class="row col-12">
-        @foreach (var item in Model)
+        @foreach (var item in Model.OrderBy(u=>u.WindowTypeId))
         {
             <div class="col-lg-4 col-md-5 mt-5 d-flex justify-content-around">
                 <div class="card" style="width: 18rem;">

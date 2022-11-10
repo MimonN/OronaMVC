@@ -4,21 +4,21 @@
     @foreach (var winType in Model.Where(u => u.Products.Count != 0))
     {
         <div class="border border-2 border-dark row m-2">
-            <div class="col-3">
+            <div class="col-xl-3 col-sm-12">
                 <div class="m-3">
                     <div class="d-flex justify-content-center mt-2" style="width: auto; height: 200px;">
                         <img src="@winType.ImageUrl" class="img-fluid" alt="Window Type Image">
                     </div>
                 </div>
             </div>
-            <div class="col-9">
+            <div class="col-xl-9 col-sm-12">
                 <div class="m-2">
-                    <h5 class="bg-primary p-3 text-white">Window Type: <b>@winType.WindowTypeName</b></h5>
+                    <h5 class="bg-primary p-3 text-white"><b>Window Type:</b> @winType.WindowTypeName</h5>
                 </div>
                 <div class="row">
                     @foreach (var product in winType.Products)
                     {
-                        <div class="col-4">
+                        <div class="col-xl-4 col-sm-12">
                             <div class="text-center m-2 p-2" style="background-color: lightblue;">
                                 <p class="mt-1"><b>Cleaning Type: </b>@product.CleaningType.CleaningName</p>
                                 <p class=""><b>Price: </b>@product.Price.ToString("$00.00")</p>

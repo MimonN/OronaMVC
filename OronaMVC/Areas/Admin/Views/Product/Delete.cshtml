@@ -1,42 +1,41 @@
 ﻿@model Product
 
 <form method="post" asp-action="DeletePOST">
-	<input asp-for="Id" hidden />
-	<div class="border p-3 mt-4">
-		<div class="row pb-2">
-			<h2 class="text-primary">Delete Product</h2>
-			<hr />
-		</div>
-		@*<div asp-validation-summary="All"></div>*@
-        <div class="col-lg-4 col-md-5 mt-5 d-flex justify-content-around">
-                     <div class="card" style="width: 18rem;">
-                         <div class="d-flex justify-content-center mt-2" style="width: auto; height: 200px;">
-                          <img src="@Model.WindowType.ImageUrl" class="img-fluid" alt="Window Type Image">
-                      </div>
-                      <div class="card-body text-center">
-                             <h5 class="card-title">@Model.WindowType.WindowTypeName</h5>
-                          <h5 class="card-title">@Model.CleaningType.CleaningName</h5>
-                       <div class="mb-3">
+    <input asp-for="Id" hidden />
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Are You Sure To <b>Delete This Product?</b></h2>
+            <hr />
+        </div>
+        @*<div asp-validation-summary="All"></div>*@
+        <div class="mt-5 d-flex justify-content-around">
+            <div class="card col-md-6">
+                <div class="d-flex justify-content-center mt-2">
+                    <img src="@Model.WindowType.ImageUrl" class="img-fluid" alt="Window Type Image">
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="card-title"><b>Window Type:</b> @Model.WindowType.WindowTypeName</h5>
+                    <h5 class="card-title"><b>Cleaning Type:</b> @Model.CleaningType.CleaningName</h5>
+                    <div class="mb-3">
                         <label asp-for="Description"></label>
                         <textarea asp-for="Description" rows="3" disabled class="form-control"></textarea>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="Price"></label>
-                        <input asp-for="Price" disabled class="form-control" />
+                        <label asp-for="Price" style="font-weight: bold"></label>
+                        <input asp-for="Price" disabled class="form-control text-center" />
                     </div>
-
+                    <button type="submit" class="btn btn-danger" style="width:150px">Delete</button>
+                    <a asp-controller="Product" asp-action="Index" class="btn btn-secondary" style="width:150px">
+                        Back to List
+                    </a>
                 </div>
             </div>
         </div>
-		<button type="submit" class="btn btn-danger" style="width:150px">Delete</button>
-		<a asp-controller="Product" asp-action="Index" class="btn btn-secondary" style="width:150px">
-			Back to List
-		</a>
-	</div>
+    </div>
 </form>
 
 @section Scripts{
-	@{
-		<partial name="_ValidationScriptsPartial" />
-	}
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
 }
