@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OronaMVC.DataAccess.Repository.IRepository;
+using OronaMVC.Models;
 using OronaMVC.Models.ViewModels;
+using OronaMVC.Utility;
 using System.Security.Claims;
 
 namespace OronaMVC.Web.Areas.Customer.Controllers
@@ -11,6 +13,7 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
 
         public CartController(IUnitOfWork unitOfWork)
@@ -65,6 +68,48 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
             }
 
             return View(ShoppingCartVM);
+		}
+
+        [HttpPost]
+        [ActionName("Summary")]
+        [ValidateAntiForgeryToken]
+		public async Task<IActionResult> SummaryPOST(ShoppingCartVM ShoppingCartVM)
+		{
+			var claimsIdentity = (ClaimsIdentity)User.Identity;
+			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            ShoppingCartVM.ListCart = await _unitOfWork.ShoppingCart.GetAllShopCartBasedOnClaim(claim.Value);
+
+            ShoppingCartVM.OrderHeader.OrderStatus = SD.StatusNew;
+            ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
+            ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
+
+			foreach (var cart in ShoppingCartVM.ListCart)
+			{
+				cart.Price = cart.Product.Price;
+				ShoppingCartVM.OrderHeader.OrderTotal += (cart.Count * cart.Price);
+			}
+
+            await _unitOfWork.OrderHeader.AddAsync(ShoppingCartVM.OrderHeader);
+            await _unitOfWork.SaveAsync();
+
+			foreach (var cart in ShoppingCartVM.ListCart)
+			{
+                OrderDetail orderDetail = new()
+                {
+                    ProductId = cart.ProductId,
+                    OrderId = ShoppingCartVM.OrderHeader.Id,
+                    Price = cart.Price,
+                    Count = cart.Count
+                };
+                await _unitOfWork.OrderDetail.AddAsync(orderDetail);
+                await _unitOfWork.SaveAsync();  
+			}
+
+            _unitOfWork.ShoppingCart.RemoveRange(ShoppingCartVM.ListCart);
+            await _unitOfWork.SaveAsync();
+
+            return RedirectToAction("Index", "Home");
 		}
 
 		public async Task<IActionResult> Plus(int cartId)

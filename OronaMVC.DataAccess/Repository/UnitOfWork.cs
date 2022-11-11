@@ -14,6 +14,8 @@ namespace OronaMVC.DataAccess.Repository
             Company = new CompanyRepository(_db);
             ShoppingCart = new ShoppingCartRepository(_db);
             ApplicationUser = new ApplicationUserRepository(_db);
+            OrderDetail = new OrderDetailRepository(_db);
+            OrderHeader = new OrderHeaderRepository(_db);
         }
         public ICleaningTypeRepository CleaningType { get; private set; }
         public IWindowTypeRepository WindowType { get; private set; }
