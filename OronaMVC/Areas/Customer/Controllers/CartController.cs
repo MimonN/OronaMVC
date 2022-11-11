@@ -25,35 +25,46 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
 
             ShoppingCartVM = new ShoppingCartVM()
             {
-                ListCart = await _unitOfWork.ShoppingCart.GetAllShopCartWithProductWithWindowTypeAndCleaningType()
+                ListCart = await _unitOfWork.ShoppingCart.GetAllShopCartBasedOnClaim(claim.Value),
+                OrderHeader = new()
             };
 
             foreach(var cart in ShoppingCartVM.ListCart)
             {
                 cart.Price = cart.Product.Price;
-                ShoppingCartVM.CartTotal += (cart.Count * cart.Price);
+                ShoppingCartVM.OrderHeader.OrderTotal += (cart.Count * cart.Price);
             }
 
             return View(ShoppingCartVM);
         }
 
-		public IActionResult Summary()
+		public async Task<IActionResult> Summary()
 		{
-			//var claimsIdentity = (ClaimsIdentity)User.Identity;
-			//var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-			//ShoppingCartVM = new ShoppingCartVM()
-			//{
-			//	ListCart = await _unitOfWork.ShoppingCart.GetAllShopCartWithProductWithWindowTypeAndCleaningType()
-			//};
+            ShoppingCartVM = new ShoppingCartVM()
+            {
+                ListCart = await _unitOfWork.ShoppingCart.GetAllShopCartBasedOnClaim(claim.Value),
+                OrderHeader = new()
+            };
 
-			//foreach (var cart in ShoppingCartVM.ListCart)
-			//{
-			//	cart.Price = cart.Product.Price;
-			//	ShoppingCartVM.CartTotal += (cart.Count * cart.Price);
-			//}
+            ShoppingCartVM.OrderHeader.ApplicationUser = await _unitOfWork.ApplicationUser.GetFirstOrDefaultAsync(u => u.Id == claim.Value);
 
-			return View();
+            ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.ApplicationUser.Name;
+            ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.ApplicationUser.PhoneNumber;
+            ShoppingCartVM.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.ApplicationUser.StreetAddress;
+            ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.ApplicationUser.City;
+            ShoppingCartVM.OrderHeader.State = ShoppingCartVM.OrderHeader.ApplicationUser.State;
+            ShoppingCartVM.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.ApplicationUser.PostalCode;
+
+            foreach (var cart in ShoppingCartVM.ListCart)
+            {
+                cart.Price = cart.Product.Price;
+                ShoppingCartVM.OrderHeader.OrderTotal += (cart.Count * cart.Price);
+            }
+
+            return View(ShoppingCartVM);
 		}
 
 		public async Task<IActionResult> Plus(int cartId)

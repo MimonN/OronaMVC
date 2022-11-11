@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OronaMVC.DataAccess.Repository.IRepository;
 using OronaMVC.Models;
+using System.Security.Claims;
 
 namespace OronaMVC.DataAccess.Repository
 {
@@ -25,9 +26,9 @@ namespace OronaMVC.DataAccess.Repository
             return shoppingCart.Count;
         }
 
-		public async Task<IEnumerable<ShoppingCart>> GetAllShopCartWithProductWithWindowTypeAndCleaningType()
+		public async Task<IEnumerable<ShoppingCart>> GetAllShopCartBasedOnClaim(string id)
 		{
-            var result = await _db.ShoppingCarts
+            var result = await _db.ShoppingCarts.Where(u=>u.ApplicationUser.Id == id)
                 .Include(i => i.Product).ThenInclude(c => c.WindowType)
                 .Include(i => i.Product).ThenInclude(c => c.CleaningType)
                 .ToListAsync();
