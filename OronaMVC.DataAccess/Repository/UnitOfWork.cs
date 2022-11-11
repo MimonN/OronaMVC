@@ -23,7 +23,10 @@ namespace OronaMVC.DataAccess.Repository
         public IShoppingCartRepository ShoppingCart { get; private set; }
         public IApplicationUserRepository ApplicationUser { get; private set; }
 
-		public async Task SaveAsync()
+        public IOrderDetailRepository OrderDetail { get; private set; }
+        public IOrderHeaderRepository OrderHeader { get; private set; }
+
+        public async Task SaveAsync()
         {
             await _db.SaveChangesAsync();
         }
