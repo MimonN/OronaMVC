@@ -1,0 +1,21 @@
+﻿@model int
+
+<div class="container row d-flex justify-content-center">
+    <div class="col-12">
+        <h1 class="text-primary text-center">Order Placed Successfully!</h1>
+        <p class="text-center">
+            Your Order Number is : @Model
+        </p>
+    </div>
+    <div class="col-6">
+        <img src="~/images/kitten.jpg" width="100%" />
+    </div>
+    <div class="col-12 text-center" style="color:maroon">
+        <br />
+        Your order has been placed successfully! We will contact you within 24 hours. Have a good time! <br />
+
+    </div>
+    <div class="col-12 text-center pt-5">
+        <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-lg btn-success">Home Page</a>
+    </div>
+</div> 

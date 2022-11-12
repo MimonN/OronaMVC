@@ -32,7 +32,7 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
                 OrderHeader = new()
             };
 
-            foreach(var cart in ShoppingCartVM.ListCart)
+            foreach (var cart in ShoppingCartVM.ListCart)
             {
                 cart.Price = cart.Product.Price;
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.Count * cart.Price);
@@ -41,8 +41,8 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
             return View(ShoppingCartVM);
         }
 
-		public async Task<IActionResult> Summary()
-		{
+        public async Task<IActionResult> Summary()
+        {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -68,15 +68,15 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
             }
 
             return View(ShoppingCartVM);
-		}
+        }
 
         [HttpPost]
         [ActionName("Summary")]
         [ValidateAntiForgeryToken]
-		public async Task<IActionResult> SummaryPOST(ShoppingCartVM ShoppingCartVM)
-		{
-			var claimsIdentity = (ClaimsIdentity)User.Identity;
-			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+        public async Task<IActionResult> SummaryPOST(ShoppingCartVM ShoppingCartVM)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
             ShoppingCartVM.ListCart = await _unitOfWork.ShoppingCart.GetAllShopCartBasedOnClaim(claim.Value);
 
@@ -84,17 +84,17 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
             ShoppingCartVM.OrderHeader.OrderDate = DateTime.Now;
             ShoppingCartVM.OrderHeader.ApplicationUserId = claim.Value;
 
-			foreach (var cart in ShoppingCartVM.ListCart)
-			{
-				cart.Price = cart.Product.Price;
-				ShoppingCartVM.OrderHeader.OrderTotal += (cart.Count * cart.Price);
-			}
+            foreach (var cart in ShoppingCartVM.ListCart)
+            {
+                cart.Price = cart.Product.Price;
+                ShoppingCartVM.OrderHeader.OrderTotal += (cart.Count * cart.Price);
+            }
 
             await _unitOfWork.OrderHeader.AddAsync(ShoppingCartVM.OrderHeader);
             await _unitOfWork.SaveAsync();
 
-			foreach (var cart in ShoppingCartVM.ListCart)
-			{
+            foreach (var cart in ShoppingCartVM.ListCart)
+            {
                 OrderDetail orderDetail = new()
                 {
                     ProductId = cart.ProductId,
@@ -103,14 +103,20 @@ namespace OronaMVC.Web.Areas.Customer.Controllers
                     Count = cart.Count
                 };
                 await _unitOfWork.OrderDetail.AddAsync(orderDetail);
-                await _unitOfWork.SaveAsync();  
-			}
+                await _unitOfWork.SaveAsync();
+            }
 
             _unitOfWork.ShoppingCart.RemoveRange(ShoppingCartVM.ListCart);
             await _unitOfWork.SaveAsync();
 
-            return RedirectToAction("Index", "Home");
-		}
+            return RedirectToAction("OrderConfirmation", new { ShoppingCartVM.OrderHeader.Id });
+        }
+
+
+        public IActionResult OrderConfirmation(int id)
+        {
+            return View(id);
+        }
 
 		public async Task<IActionResult> Plus(int cartId)
         {
